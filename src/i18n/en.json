@@ -1,0 +1,4 @@
+{
+  "INVALID_MERCHANT_ID": "Wrong merchant credentials.",
+  "INVALID_CATALOG_PARAMETERS": "Wrong catalog request parameters."
+}
