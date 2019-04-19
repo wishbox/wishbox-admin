@@ -1,8 +1,8 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect } from 'react'
 import logo from './logo.svg';
 import './App.css';
 import { nbsp, capfirst } from './util'
-import DisconnectDialog from './components/disconnect-dialog'
+import DisconnectDialog from './components/DisconnectDialog'
 import theme from './theme'
 import { useAuth } from './api'
 import { useLocale, useHistory } from './hooks'
@@ -22,9 +22,18 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { makeStyles } from '@material-ui/core/styles';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import PeopleIcon from '@material-ui/icons/People';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import LayersIcon from '@material-ui/icons/Layers';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import clsx from 'clsx';
 import loadable from '@loadable/component';
-import { mainListItems, secondaryListItems } from './components/listItems';
 
 // const ForgotPasswordPage = loadable(() => import('./pages/forgot-password'))
 // const ResetPasswordPage = loadable(() => import('./pages/reset-password'))
@@ -32,6 +41,7 @@ import { mainListItems, secondaryListItems } from './components/listItems';
 // const EmailConfirmationPage = loadable(() => import('./pages/reset-password-confirmation'))
 // const SignInPage = loadable(() => import('./pages/sign-in'))
 const DashboardPage = loadable(() => import('./pages/dashboard'))
+const OrdersPage = loadable(() => import('./pages/orders'))
 
 
 const Page = props => {
@@ -44,6 +54,8 @@ const Page = props => {
     //   return <ResetPasswordConfirmationPage {...props} />
     // case '/email-confirmed':
     //   return <EmailConfirmationPage {...props} />
+    case '/orders':
+      return <OrdersPage {...props} />
     case '/dashboard':
     default:
       return <DashboardPage {...props} />
@@ -145,8 +157,13 @@ export default function App (props) {
   let { t, lang, setLang } = useLocale()
   let history = useHistory()
 
+  const menu = [
+    { href: '/dashboard', label: t`Dashboard`, icon: <DashboardIcon/> },
+    { href: '/orders', label: t`Orders`, icon: <ShoppingCartIcon/> },
+  ]
+
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -190,14 +207,23 @@ export default function App (props) {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
+        <List component='nav'>
+          {
+            menu.map(({label, href, icon}) => (
+              <ListItem key={'menu-item-' + label} button component='a' href={href} selected={history.location.pathname === href}>
+                <ListItemIcon>
+                  { icon }
+                </ListItemIcon>
+                <ListItemText primary={label} />
+              </ListItem>
+            ))
+          }
+        </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Page path="/dashboar"/>
+          <Page path={history.location.pathname} />
         </Container>
         <MadeWithLove />
       </main>

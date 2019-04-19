@@ -8,19 +8,20 @@ export const [ useHistory ] = create(set => {
   let history = createBrowserHistory()
 
   const unlisten = history.listen((location, action) => {
-    set({path: location.pathname})
+    // TODO: destructuring is redundant here, report a bug
+    set({...history})
   })
 
   let delegation = delegate('a', 'click', e => {
     e.preventDefault()
-    set({path: e.delegateTarget.getAttribute('href')})
+    history.push(e.delegateTarget.getAttribute('href'))
   });
 
-  function destroy () {
-    console.warning('History should not be destroyed normally')
-    unlisten()
-    delegation.destroy()
-  }
+  // function destroy () {
+  //   console.warning('History should not be destroyed normally')
+  //   unlisten()
+  //   delegation.destroy()
+  // }
 
-  return history
+  return {...history}
 })
