@@ -42,7 +42,6 @@ export default function Orders() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  console.log(123)
   return (
     <Grid container spacing={3}>
       {/* Recent Orders */}

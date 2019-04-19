@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react'
-import { useSnackbar } from 'notistack'
+import { useSnackbar as useNotistack } from 'notistack'
 import { errorMessage } from '../util'
 import { useLocale } from './locale'
 
 export function useError(error) {
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useNotistack()
   const { t } = useLocale()
 
   // display snack if sending form error
@@ -17,11 +17,7 @@ export function useError(error) {
   }, [error])
 }
 
-export function useSuccess(msg) {
-  const { enqueueSnackbar } = useSnackbar()
-
-  // display snack if sending form error
-  useEffect(() => {
-    if (msg) enqueueSnackbar(msg, {variant: 'success'})
-  }, [msg])
+export function useSnackbar(msg) {
+  const { enqueueSnackbar } = useNotistack()
+  return enqueueSnackbar
 }

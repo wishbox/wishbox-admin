@@ -5,7 +5,8 @@ import { nbsp, capfirst } from './util'
 import DisconnectDialog from './components/DisconnectDialog'
 import theme from './theme'
 import { useAuth } from './api'
-import { useLocale, useHistory } from './hooks'
+import { useLocale, useHistory, useSnackbar } from './hooks'
+import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -39,7 +40,7 @@ import loadable from '@loadable/component';
 // const ResetPasswordPage = loadable(() => import('./pages/reset-password'))
 // const ResetPasswordConfirmationPage = loadable(() => import('./pages/reset-password-confirmation'))
 // const EmailConfirmationPage = loadable(() => import('./pages/reset-password-confirmation'))
-// const SignInPage = loadable(() => import('./pages/sign-in'))
+const SignInPage = loadable(() => import('./pages/sign-in'))
 const DashboardPage = loadable(() => import('./pages/dashboard'))
 const OrdersPage = loadable(() => import('./pages/orders'))
 
@@ -57,20 +58,20 @@ const Page = props => {
     case '/orders':
       return <OrdersPage {...props} />
     case '/dashboard':
-    default:
       return <DashboardPage {...props} />
-    // case '/sign-in':
-    //   return <SignInPage {...props} />
+    case '/sign-in':
+    default:
+      return <SignInPage {...props} />
   }
 }
 
 
-function MadeWithLove() {
+function Footer() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Built with love by the '}
       <Link color="inherit" href="https://material-ui.com/">
-        Material-UI
+        DY
       </Link>
       {' team.'}
     </Typography>
@@ -82,9 +83,6 @@ function MadeWithLove() {
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
@@ -154,8 +152,11 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function App (props) {
+  // let { user } = useAuth()
+  let user = false
   let { t, lang, setLang } = useLocale()
   let history = useHistory()
+  const snack = useSnackbar()
 
   const menu = [
     { href: '/dashboard', label: t`Dashboard`, icon: <DashboardIcon/> },
@@ -171,8 +172,19 @@ export default function App (props) {
     setOpen(false);
   };
 
+  let isAuthPage = ['/sign-in'].indexOf(history.location.pathname) >= 0
+
+  // redirect not logged in user
+  if (!user && !isAuthPage) {
+    history.push('/sign-in')
+    snack(t`You were logged out.`)
+  }
+
+
+  if (history.location.pathname === '/sign-in') return <Page path={history.location.path} />
+
   return (
-    <div className={classes.root}>
+    <Box display="flex">
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -225,8 +237,8 @@ export default function App (props) {
         <Container maxWidth="lg" className={classes.container}>
           <Page path={history.location.pathname} />
         </Container>
-        <MadeWithLove />
+        <Footer />
       </main>
-    </div>
+    </Box>
   );
 }

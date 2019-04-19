@@ -8,8 +8,9 @@ export const [ useHistory ] = create(set => {
   let history = createBrowserHistory()
 
   const unlisten = history.listen((location, action) => {
-    // TODO: destructuring is redundant here, report a bug
-    set({...history})
+    // TODO: this hack is malicious here, forcing rerender.
+    set({})
+    set(history)
   })
 
   let delegation = delegate('a', 'click', e => {
@@ -23,5 +24,5 @@ export const [ useHistory ] = create(set => {
   //   delegation.destroy()
   // }
 
-  return {...history}
+  return history
 })
