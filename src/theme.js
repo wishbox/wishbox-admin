@@ -13,7 +13,7 @@ const theme = createMuiTheme({
 
   typography: {
     fontFamily: [
-      'Montserrat',
+      // 'Montserrat',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
@@ -30,6 +30,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiTypography: {
       h4: {
+        fontFamily: 'Montserrat',
         fontWeight: 700,
         letterSpacing: '.013ex'
       }

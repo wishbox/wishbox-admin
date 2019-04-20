@@ -24,5 +24,5 @@ export const [ useHistory ] = create(set => {
   //   delegation.destroy()
   // }
 
-  return history
+  return {...history}
 })

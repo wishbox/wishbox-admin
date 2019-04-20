@@ -174,10 +174,11 @@ export default function App (props) {
 
 
   // redirect not logged in user
-  if (!user && !isAuthPage(history.location.pathname)) {
-    history.push('/sign-in')
-    snack(t`You were logged out.`)
-  }
+  // if (!user && !isAuthPage(history.location.pathname)) {
+  //   history.push('/sign-in')
+  //   snack(t`You were logged out.`)
+  // }
+    console.log(history.location.pathname)
 
 
   if (isAuthPage(history.location.pathname)) return (
