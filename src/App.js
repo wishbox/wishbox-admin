@@ -172,19 +172,24 @@ export default function App (props) {
     setOpen(false);
   };
 
-  let isAuthPage = ['/sign-in'].indexOf(history.location.pathname) >= 0
 
   // redirect not logged in user
-  if (!user && !isAuthPage) {
+  if (!user && !isAuthPage(history.location.pathname)) {
     history.push('/sign-in')
     snack(t`You were logged out.`)
   }
 
 
-  if (history.location.pathname === '/sign-in') return <Page path={history.location.path} />
+  if (isAuthPage(history.location.pathname)) return (
+    <Box display="flex" minHeight="100vh" bgcolor="background.default">
+      <Container maxWidth="xs" className={classes.container}>
+        <Page path={history.location.path} />
+      </Container>
+    </Box>
+  )
 
   return (
-    <Box display="flex">
+    <Box display="flex" minHeight="100vh" bgcolor="textSecondary">
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -241,4 +246,9 @@ export default function App (props) {
       </main>
     </Box>
   );
+}
+
+
+function isAuthPage(path){
+  return ['/sign-in'].indexOf(path) >= 0
 }

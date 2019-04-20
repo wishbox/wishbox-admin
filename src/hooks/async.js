@@ -63,6 +63,8 @@ export const useAsyncCall = (fn, deps) => {
       return new Promise((ok, nok) => {
         self.resolve = ok
         self.reject = nok
+      }).catch(e => {
+        console.log(e)
       })
     },
     result: null,
@@ -101,8 +103,8 @@ export const useAsyncCall = (fn, deps) => {
       set(null)
     }, error => {
       if (!isValid) return
-      self.error = error
       self.reject(error)
+      self.error = error
       set(null)
     })
 
