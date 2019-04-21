@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -11,6 +11,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from '../components/Title';
+import { useTitle, useLocale } from '../hooks'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -39,8 +40,11 @@ const rows = [
 
 
 export default function Orders() {
+  const { t } = useLocale()
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  useTitle(t`Orders`)
 
   return (
     <Grid container spacing={3}>

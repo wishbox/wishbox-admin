@@ -1,28 +1,35 @@
-import { createBrowserHistory } from 'history'
+import { useEffect, useState } from 'react'
 import delegate from 'delegate-it'
-import create from 'zustand'
+import { createBrowserHistory } from 'history'
 
+
+let history = createBrowserHistory()
+let unlisten, delegation
+let count = 0
 
 // global-ish history tracker
-export const [ useHistory ] = create(set => {
-  let history = createBrowserHistory()
+export function useHistory() {
+  let [, push] = useState(() => {
+    if (count++) return history
 
-  const unlisten = history.listen((location, action) => {
-    // TODO: this hack is malicious here, forcing rerender.
-    set({})
-    set(history)
+    unlisten = history.listen((location, action) => {
+      push({})
+    })
+
+    delegation = delegate('a', 'click', e => {
+      e.preventDefault()
+      history.push(e.delegateTarget.getAttribute('href'))
+    })
+
+    return history
   })
 
-  let delegation = delegate('a', 'click', e => {
-    e.preventDefault()
-    history.push(e.delegateTarget.getAttribute('href'))
-  });
+  useEffect(() => () => {
+    if (!--count) {
+      unlisten()
+      delegation.destroy()
+    }
+  }, [])
 
-  // function destroy () {
-  //   console.warning('History should not be destroyed normally')
-  //   unlisten()
-  //   delegation.destroy()
-  // }
-
-  return {...history}
-})
+  return history
+}

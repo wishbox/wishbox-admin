@@ -5,7 +5,7 @@ import { nbsp, capfirst } from './util'
 import DisconnectDialog from './components/DisconnectDialog'
 import theme from './theme'
 import { useAuth } from './api'
-import { useLocale, useHistory, useSnackbar } from './hooks'
+import { useLocale, useHistory, useSnackbar, useTitle } from './hooks'
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -35,6 +35,7 @@ import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import clsx from 'clsx';
 import loadable from '@loadable/component';
+
 
 // const ForgotPasswordPage = loadable(() => import('./pages/forgot-password'))
 // const ResetPasswordPage = loadable(() => import('./pages/reset-password'))
@@ -157,6 +158,7 @@ export default function App (props) {
   let { t, lang, setLang } = useLocale()
   let history = useHistory()
   const snack = useSnackbar()
+  const title = useTitle()
 
   const menu = [
     { href: '/dashboard', label: t`Dashboard`, icon: <DashboardIcon/> },
@@ -178,7 +180,6 @@ export default function App (props) {
   //   history.push('/sign-in')
   //   snack(t`You were logged out.`)
   // }
-    console.log(history.location.pathname)
 
 
   if (isAuthPage(history.location.pathname)) return (
@@ -203,7 +204,7 @@ export default function App (props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            { title }
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
