@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -10,6 +10,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import Title from '../components/Title';
 import { useTitle, useLocale } from '../hooks'
 
@@ -38,11 +40,20 @@ const rows = [
   createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
 ];
 
+const count = 100
+
+const rowsPerPageOptions = [15, 25, 50, 100]
+
 
 export default function Orders() {
   const { t } = useLocale()
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
+  const [page, setPage] = useState(0);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('date');
 
   useTitle(t`Orders`)
 
@@ -73,14 +84,25 @@ export default function Orders() {
                 </TableRow>
               ))}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  count={count}
+                  page={page}
+                  component="td"
+                  rowsPerPage={rowsPerPage}
+                  onChangePage={(e, page) => {
+                    setPage(page)
+                  }}
+                  onChangeRowsPerPage={(e, v, x) => {
+                    setRowsPerPage(e.target.value)
+                  }}
+                  rowsPerPageOptions={rowsPerPageOptions}
+                >
+                </TablePagination>
+              </TableRow>
+            </TableFooter>
           </Table>
-          <div className={classes.seeMore}>
-            <Box mt={3}>
-              <Link color="primary" href="javascript:;">
-                See more orders
-              </Link>
-            </Box>
-          </div>
         </Paper>
       </Grid>
     </Grid>

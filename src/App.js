@@ -28,8 +28,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import ListIcon from '@material-ui/icons/List';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
+import CardMembershipIcon from '@material-ui/icons/CardMembership';
 import PeopleIcon from '@material-ui/icons/People';
+import GroupIcon from '@material-ui/icons/Group';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
@@ -44,6 +48,8 @@ import loadable from '@loadable/component';
 const SignInPage = loadable(() => import('./pages/sign-in'))
 const DashboardPage = loadable(() => import('./pages/dashboard'))
 const OrdersPage = loadable(() => import('./pages/orders'))
+const GiftsPage = loadable(() => import('./pages/gifts'))
+const PartnersPage = loadable(() => import('./pages/partners'))
 
 
 const Page = props => {
@@ -58,6 +64,10 @@ const Page = props => {
     //   return <EmailConfirmationPage {...props} />
     case '/orders':
       return <OrdersPage {...props} />
+    case '/gifts':
+      return <GiftsPage {...props} />
+    case '/partners':
+      return <PartnersPage {...props} />
     case '/dashboard':
       return <DashboardPage {...props} />
     case '/sign-in':
@@ -162,7 +172,10 @@ export default function App (props) {
 
   const menu = [
     { href: '/dashboard', label: t`Dashboard`, icon: <DashboardIcon/> },
-    { href: '/orders', label: t`Orders`, icon: <ShoppingCartIcon/> },
+    { href: '/orders', label: t`Orders`, icon: <ListIcon/> },
+    { href: '/gifts', label: t`Gifts`, icon: <CardGiftcardIcon/> },
+    { href: '/multigifts', label: t`Multigifts`, icon: <CardMembershipIcon/> },
+    { href: '/partners', label: t`Partners`, icon: <GroupIcon/> },
   ]
 
   const classes = useStyles();
